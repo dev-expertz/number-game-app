@@ -1,10 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function StartGameScreen() {
+export default function GameOverScreen() {
   return (
     <View style={styles.container}>
-      <TextInput />
+      <Text>Game Over</Text>
     </View>
   );
 }
