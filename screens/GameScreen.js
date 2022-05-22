@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Title from "../components/ui/Title";
 
 function generateRandomBetween(min, max, exclude) {
+  if (min === max) {
+    return max;
+  }
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
 
   if (rndNum === exclude) {
@@ -16,7 +19,7 @@ function generateRandomBetween(min, max, exclude) {
 let minBoundary = 1,
   maxBoundary = 100;
 
-export default function GameScreen({ userNumber }) {
+export default function GameScreen({ userNumber, onGameOver }) {
   const initialGuess = generateRandomBetween(
     minBoundary,
     maxBoundary,
@@ -24,37 +27,36 @@ export default function GameScreen({ userNumber }) {
   );
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
 
-  function nextGuessHandler(direction) {
-    // direction => 'lower', 'greater'
-    if((direction === "lower" && currentGuess < userNumber) || (direction === "greater" && currentGuess > userNumber))
-    {
-        Alert.alert(
-            "Don't Lie!",
-            "You know that this is wrong...",
-            [{ text: "Sorry!", style: "cancel" }]
-          );
-        return;
-    }
-
-    if (direction === "lower") {
-        maxBoundary = currentGuess;
-    } else {
-        minBoundary = currentGuess + 1;
-    }
-    const updatedGuess = generateRandomBetween(minBoundary, maxBoundary, 0);
-    setCurrentGuess(updatedGuess);
-    if (updatedGuess === userNumber) {
+  useEffect(() => {
+    if (currentGuess === userNumber) {
       Alert.alert(
         "Found Number!",
         "The Number input by the User was " + userNumber + "!!!",
-        [{ text: "Okay", style: "destructive", onPress: resetGame }]
+        [{ text: "Okay", style: "destructive" }]
       );
+      onGameOver();
+    }
+  }, [currentGuess, userNumber, onGameOver]);
+
+  function nextGuessHandler(direction) {
+    // direction => 'lower', 'greater'
+    if (
+      (direction === "lower" && currentGuess < userNumber) ||
+      (direction === "greater" && currentGuess > userNumber)
+    ) {
+      Alert.alert("Don't Lie!", "You know that this is wrong...", [
+        { text: "Sorry!", style: "cancel" },
+      ]);
       return;
     }
-  }
 
-  function resetGame() {
-    console.log("Reset Game");
+    if (direction === "lower") {
+      maxBoundary = currentGuess;
+    } else {
+      minBoundary = currentGuess + 1;
+    }
+    const updatedGuess = generateRandomBetween(minBoundary, maxBoundary, 0);
+    setCurrentGuess(updatedGuess);
   }
 
   return (

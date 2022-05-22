@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Title from '../components/ui/Title';
 
-export default function GameOverScreen() {
+export default function GameOverScreen({userNumber}) {
   return (
     <View style={styles.screen}>
       <Title>Game Over</Title>
