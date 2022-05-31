@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, FlatList } from "react-native";
+import { StyleSheet, View, Text, Alert, FlatList, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import NumberContainer from "../components/game/NumberContainer";
@@ -109,14 +109,16 @@ export default function GameScreen({ userNumber, onGameOver }) {
     </View>
   );
 }
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    /*justifyContent: "center",
-    alignItems: "center",*/
-    paddingTop: 36,
-    paddingHorizontal: 24,
+    /*justifyContent: "center",*/
+    alignItems: "center",
+    paddingTop: screenHeight < 500 ? 18 : 48,
+    paddingHorizontal: screenWidth < 380 ? 12 : 24,
   },
   listContainer:{
       flex: 1,
